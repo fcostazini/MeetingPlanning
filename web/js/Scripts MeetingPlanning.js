@@ -13,7 +13,7 @@ function TotalCategoria(gastoCategoria, cantidadPersonas) {
 	TotalCategoria.prototype.getNombre = function() { return this.gastoCategoria.nombre; };
 	TotalCategoria.prototype.getGasto = function() { return this.gastoCategoria.gasto; };
 	TotalCategoria.prototype.agregarGasto = function(valor) { this.gastoCategoria.agregarGasto(valor)};
-	
+
 	
 	
 function GastoCategoria(nombre,gasto){
@@ -76,9 +76,42 @@ function Invitado(gestorCategoria, nombre){
 	
 function GestorCategoria(){
 	this.totalesCategoria = [];
-	
+	var totalInvitados = 0;
 }	
 
+	GestorCategoria.prototype.sumarInvitado = function(){
+		this.totalInvitados++;
+		for(var i in this.totalesCategoria){
+			this.totalesCategoria[i].cantidadPersonas++;
+		}
+	}
+		
+	GestorCategoria.prototype.restarInvitado = function(invitado){
+		this.totalInvitados--;
+		for (var i in invitado.gastosCategoria){
+			for (var j in this.totalesCategoria){
+				if (invitado.gastosCategoria[i].nombre==this.totalesCategoria[j].getNombre()){
+					this.totalesCategoria[j].agregarGasto(-1*invitado.gastosCategoria[i].gasto);
+				}
+			}
+			
+		}
+		var encontrado;
+		for (var i in this.totalesCategoria){
+			encontrado = falso;
+			for (var j in invitado.categoriasNoConsumidas){
+				if(this.totalesCategoria[i].getNombre()==invitado.categoriasNoConsumidas[j]){
+					encontrado = true;
+					break;
+				}
+			}
+			if(!encontrado){
+				this.totalesCategoria[i].cantidadPersonas--;
+			}
+		}
+		
+	}
+	
 
 
 function Evento(){
@@ -86,12 +119,13 @@ function Evento(){
 	this.gestorCategoria = new GestorCategoria();
 }
 	
-	Evento.prototype.abrirEvento = function(){
-		
-	}
-	
-	Evento.prototype.cerrarEvento  = function(){
-		
+	Evento.prototype.getInvitado = function(nombre){
+		for(var i in this.invitado){
+			if(nombre==this.invitados[i].nombre){
+				return this.invitados[i];
+			}
+		}
+		return null;
 	}
 	
 	Evento.prototype.agregarInvitado  = function(nombre){
@@ -101,7 +135,7 @@ function Evento(){
 			}
 		}
 		this.invitados[this.invitados.length] = new Invitado(this.gestorCategoria, nombre);
-		//Falta llamar al gestor y sumar 1 a todas las categorias!
+		this.gestorCategoria.sumarInvitado();
 	}
 	
 	Evento.prototype.quitarInvitado  = function(nombre){
@@ -115,11 +149,9 @@ function Evento(){
 		if(posicion<0){
 			return false;
 		} else {
+			this.gestorCategoria.restarInvitado(Evento.getInvitado(posicion));
 			this.invitados.splice(posicion,1);			
 		}
-		//Falta llamar al gestor para:
-			//Restar 1 de todas las categorias que consuma el invitado.
-			//Restar los gastos de cada categoria que tenga el invitado.
 	}
 
 
