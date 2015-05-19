@@ -1,53 +1,5 @@
 
 
-
-function Invitado(gestorCategoria, nombre){
-	this.categoriasNoConsumidas = [];
-	this.gastosCategoria = [];
-	this.gestorCategoria = gestorCategoria;
-	this.nombre = nombre;
-	
-	this.agregarANoConsumir = function(nombreCategoria){
-		if(!arrayContains(this.categoriasNoConsumidas, nombreCategoria)){
-			this.categoriasNoConsumidas[this.categoriasNoConsumidas.length] = nombreCategoria;
-		}
-		//Agregar llamado al gestor para restar uno de la categoria
-	}
-
-	this.quitarDeNoConsumir = function(nombreCategoria){
-			
-			var  posicion = this.categoriasNoConsumidas.indexOf(nombreCategoria);
-			if(posicion>=0){
-				this.categoriasNoConsumidas.splice(posicion,1);
-			}
-		//Agregar llamado al gestor para sumar uno de la categoria
-	}
-	
-	this.agregarGasto = function(gastoCategoria){
-		for(var i in this.gastosCategoria){
-			if(gastoCategoria.equals(this.gastosCategoria[i])){
-				return false;
-			}
-		}
-		this.gastosCategoria[this.gastosCategoria.length] = gastoCategoria;
-	}
-	
-	this.quitarGasto = function(gastoCategoria){
-		var posicion = -1;
-		for(var i in this.gastosCategoria){
-			if(gastoCategoria.equals(this.gastosCategoria[i])){
-				posicion = i;
-				break;
-			}
-		}
-		if(posicion<0){
-			return false;
-		} else {
-			this.gastosCategoria.splice(posicion,1);			
-		}
-	}
-	
-}
 if(TEST == undefined){
 	var TEST = {};
 }
