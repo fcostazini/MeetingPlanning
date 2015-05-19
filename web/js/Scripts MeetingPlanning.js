@@ -95,7 +95,7 @@ function Evento(){
 	}
 	
 	Evento.prototype.agregarInvitado  = function(nombre){
-		for(var i in this.invitado){
+		for(var i in this.invitados){
 			if(nombre==this.invitados[i].nombre){
 				return false;
 			}
@@ -106,7 +106,7 @@ function Evento(){
 	
 	Evento.prototype.quitarInvitado  = function(nombre){
 		var posicion = -1;
-		for(var i in this.invitado){
+		for(var i in this.invitados){
 			if(nombre==this.invitados[i].nombre){
 				posicion=i;
 				break;
