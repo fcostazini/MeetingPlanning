@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<script src="js/Scripts MeetingPlanning.js"></script>
+		<script src="js/tests/testInvitado.js"></script>
+		<script src="js/external/jquery-2.1.4.min.js"></script>
+		<title>TEST</title>
+		
+	</head>
+	<body>
+		<header>
+		</header>
+
+		<footer>
+			<div class="content">
+				<span>Hola Mundo</span>
+			</div>
+		</footer>
+
+		<script>
+		$(document).ready(function(){
+			for(var a in TEST){
+				$(".content").append("<div><span>" + a + "</span><div>");
+				var resultados = TEST[a].run();
+				$(resultados).each(function(i,e){
+					$(".content").append("<div><span>"+ e.name +"</span><span style='margin:30px'>" +  e.value +"</span></div>");
+				});
+			};
+		});
+
+		</script>
+	</body>
+</html>
