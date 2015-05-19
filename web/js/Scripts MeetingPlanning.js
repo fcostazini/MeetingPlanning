@@ -1,9 +1,10 @@
 
+
+
+
 function arrayContains(array, valor) {
-	return array.indexOf(valor) > =0;
+	return array.indexOf(valor) >= 0;
 }
-
-
 
 function TotalCategoria(gastoCategoria, cantidadPersonas) {
 	this.gastoCategoria = gastoCategoria;
@@ -85,17 +86,17 @@ function Evento(){
 	this.gestorCategoria = new GestorCategoria();
 }
 	
-	Evento.prototype.abrirEvento(){
+	Evento.prototype.abrirEvento = function(){
 		
 	}
 	
-	Evento.prototype.cerrarEvento(){
+	Evento.prototype.cerrarEvento  = function(){
 		
 	}
 	
-	Evento.prototype.agregarInvitado(nombre){
+	Evento.prototype.agregarInvitado  = function(nombre){
 		for(var i in this.invitado){
-			if(nombre==this.invitados[i].nombre)){
+			if(nombre==this.invitados[i].nombre){
 				return false;
 			}
 		}
@@ -103,10 +104,10 @@ function Evento(){
 		//Falta llamar al gestor y sumar 1 a todas las categorias!
 	}
 	
-	Evento.prototype.quitarInvitado(nombre){
+	Evento.prototype.quitarInvitado  = function(nombre){
 		var posicion = -1;
 		for(var i in this.invitado){
-			if(nombre==this.invitados[i].nombre)){
+			if(nombre==this.invitados[i].nombre){
 				posicion=i;
 				break;
 			}
