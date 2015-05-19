@@ -120,7 +120,7 @@ function Evento(){
 }
 	
 	Evento.prototype.getInvitado = function(nombre){
-		for(var i in this.invitado){
+		for(var i in this.invitados){
 			if(nombre==this.invitados[i].nombre){
 				return this.invitados[i];
 			}
@@ -149,8 +149,9 @@ function Evento(){
 		if(posicion<0){
 			return false;
 		} else {
-			this.gestorCategoria.restarInvitado(Evento.getInvitado(posicion));
+			this.gestorCategoria.restarInvitado(this.invitados[i]);
 			this.invitados.splice(posicion,1);			
+			
 		}
 	}
 
