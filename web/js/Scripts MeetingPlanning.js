@@ -105,4 +105,3 @@ TEST.Invitados = {
 	
 }
 
-//Prueba
