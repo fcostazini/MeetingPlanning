@@ -35,17 +35,16 @@ function Invitado(gestorCategoria, nombre){
 	Invitado.prototype.agregarANoConsumir = function(nombreCategoria){
 		if(!arrayContains(this.categoriasNoConsumidas, nombreCategoria)){
 			this.categoriasNoConsumidas[this.categoriasNoConsumidas.length] = nombreCategoria;
+			this.gestorCategoria.agregarNoConsumo(nombreCategoria);
 		}
-		//Agregar llamado al gestor para restar uno de la categoria
 	}
 
 	Invitado.prototype.quitarDeNoConsumir = function(nombreCategoria){
-			
-			var  posicion = this.categoriasNoConsumidas.indexOf(nombreCategoria);
-			if(posicion>=0){
-				this.categoriasNoConsumidas.splice(posicion,1);
-			}
-		//Agregar llamado al gestor para sumar uno de la categoria
+		var  posicion = this.categoriasNoConsumidas.indexOf(nombreCategoria);
+		if(posicion>=0){
+			this.categoriasNoConsumidas.splice(posicion,1);
+			this.gestorCategoria.quitarNoConsumo(nombreCategoria);
+		}
 	}
 	
 	Invitado.prototype.agregarGasto = function(gastoCategoria){
@@ -55,6 +54,7 @@ function Invitado(gestorCategoria, nombre){
 			}
 		}
 		this.gastosCategoria[this.gastosCategoria.length] = gastoCategoria;
+		this.gestorCategoria.sumarGasto(gastoCategoria);
 	}
 	
 	Invitado.prototype.quitarGasto = function(gastoCategoria){
@@ -68,15 +68,17 @@ function Invitado(gestorCategoria, nombre){
 		if(posicion<0){
 			return false;
 		} else {
-			this.gastosCategoria.splice(posicion,1);			
+			this.gastosCategoria.splice(posicion, 1);
+			this.gestorCategoria.restarGasto(gastoCategoria);
 		}
 	}
-	
 
-	
-function GestorCategoria(){
+
+
+function GestorCategoria(evento){
 	this.totalesCategoria = [];
-	var totalInvitados = 0;
+	this.totalInvitados = 0;
+	this.evento = evento;
 }	
 
 	GestorCategoria.prototype.sumarInvitado = function(){
@@ -111,12 +113,68 @@ function GestorCategoria(){
 		}
 		
 	}
+
+	GestorCategoria.prototype.sumarGasto = function(gasto){
+		var encontrado;
+		encontrado = -1
+		for (var i in this.totalesCategoria){
+			if(this.totalesCategoria[i].getNombre()==gasto.nombre){
+				encontrado = i;
+				break;
+			}
+		}
+		if(encontrado>=0){
+			this.totalesCategoria[encontrado].agregarGasto(gasto.gasto);
+		}
+		else {
+			this.totalesCategoria[this.totalesCategoria.length] = new TotalCategoria(gasto,this.totalInvitados);
+		}
+	}
+
+	GestorCategoria.prototype.restarGasto = function(gasto){
+		var encontrado;
+		encontrado = -1
+		for (var i in this.totalesCategoria){
+			if(this.totalesCategoria[i].getNombre()==gasto.nombre){
+				encontrado = i;
+				break;
+			}
+		}
+		if(encontrado>=0){
+			this.totalesCategoria[encontrado].agregarGasto(-1*gasto.gasto);
+			if (this.totalesCategoria[encontrado].getGasto()<=0){
+				this.totalesCategoria.slice(encontrado,1);
+				this.evento.actualizarCategorias(gasto.nombre);
+			}
+		}
+		else {
+			return false;
+		}
+	}
+
+	GestorCategoria.prototype.agregarNoConsumo = function(categoria){
+		for (var i in this.totalesCategoria){
+			if(this.totalesCategoria[i].getNombre()==categoria){
+				this.totalesCategoria[i].cantidadPersonas--;
+				break;
+			}
+		}
+	}
+
+	GestorCategoria.prototype.quitarNoConsumo = function(categoria){
+		for (var i in this.totalesCategoria){
+			if(this.totalesCategoria[i].getNombre()==categoria){
+				this.totalesCategoria[i].cantidadPersonas++;
+				break;
+			}
+		}
+	}
 	
 
 
 function Evento(){
 	this.invitados = [];
-	this.gestorCategoria = new GestorCategoria();
+	this.gestorCategoria = new GestorCategoria(this);
 }
 	
 	Evento.prototype.getInvitado = function(nombre){
@@ -153,6 +211,10 @@ function Evento(){
 			this.invitados.splice(posicion,1);			
 			
 		}
+	}
+
+	Evento.prototype.actualizarCategorias  = function(categoria){
+
 	}
 
 
